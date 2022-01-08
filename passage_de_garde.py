@@ -1,5 +1,5 @@
 import pickle
-
+import numpy as np
 def choix():
     print('1) saisir les enseignants')
     print('2) ajouter un enseignant')
@@ -26,8 +26,7 @@ def saisir_E():
 
     E["nom_prenom"]=input("nom et prenom enseignant : ")
     while not(verif_name(E["nom_prenom"])):
-        E["nom_prenom"]=input("nom et prenom enseignant : ")
-    print('done')    
+        E["nom_prenom"]=input("nom et prenom enseignant : ")    
     E["score"]=int(input("score enseignant : "))
     while not(E["score"]>0):
         E["score"]=int(input("score enseignant : "))
@@ -63,28 +62,27 @@ def add(path):
     file.close()
 
 def rechercher(x):
-    file = open("promotion.dat","ab")
-    content = file.readline()
-    index = -1
-    i = 1
-    while content != " " and index != -1:
-        if(content["identifiant"] == x):
-            index = i
-        content = file.readline()
-        i += 1
-    file.close()
+    
     return index
 
-def modifier(x):
-    file = open("promotion.dat","ab")
-    content = file.readline()
-    found = False
-    while content != " " and found == False:
-        if content["identifiant"] == x:
-            content = dict()
-            found = True
-        content = file.readline()
-    file.close()
+def ceateTab():
+    file = open("promotion.dat","rb")
+    fin_fiche = False
+    T = np.array([dict()]*1000)
+    size = 0
+    stop = False
+    i=0
+    while not(fin_fiche):
+        while stop == False:
+            try: 
+                T[i] = pickle.load(file)
+                size += 1
+                i += 1     
+            except:
+                fin_fiche = True
+                stop = True
+    file.close
+    return T,size
 
 def mod(path):
     x = input("saisir identifiant enseignant : ")
@@ -92,6 +90,9 @@ def mod(path):
         x = input("saisir identifiant enseignant : ")
     if( rechercher(x) != -1):
         modifier(x)
+
+
+ceateTab()
 cont = True    
 while(cont):
     choix()
